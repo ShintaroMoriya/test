@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主観的幸福度を最大化するための1日のタイムスケジュール</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=M+PLUS+1p:wght@400;500;700&family=Shippori+Mincho:wght@400;500;700&display=swap');
+        
+        :root {
+            --color-primary: #0A2463;
+            --color-secondary: #1E56A0;
+            --color-tertiary: #3D84B8;
+            --color-quaternary: #78A6C8;
+            --color-background: #E6F2F5;
+            --color-text: #333333;
+            --color-white: #FFFFFF;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            line-height: 1.6;
+            color: var(--color-text);
+            background-color: var(--color-background);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--color-white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .title {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background-color: var(--color-tertiary);
+            border-radius: 2px;
+        }
+        
+        .intro {
+            background-color: var(--color-background);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .intro-title {
+            font-size: 22px;
+            font-weight: 500;
+            color: var(--color-secondary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .intro-title svg {
+            margin-right: 10px;
+        }
+        
+        .ranking {
+            padding-left: 20px;
+        }
+        
+        .ranking li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .ranking li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            background-color: var(--color-tertiary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-white);
+            font-weight: 700;
+            font-size: 14px;
+        }
+        
+        .ranking li:nth-child(1)::before {
+            content: "1";
+            background-color: #FFD700;
+        }
+        
+        .ranking li:nth-child(2)::before {
+            content: "2";
+            background-color: #C0C0C0;
+        }
+        
+        .ranking li:nth-child(3)::before {
+            content: "3";
+            background-color: #CD7F32;
+        }
+        
+        .ranking li:nth-child(4)::before {
+            content: "4";
+            background-color: var(--color-tertiary);
+        }
+        
+        .ranking li:nth-child(5)::before {
+            content: "5";
+            background-color: var(--color-quaternary);
+        }
+        
+        .timeline {
+            position: relative;
+            margin-top: 50px;
+        }
+        
+        .timeline::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 25px;
+            width: 4px;
+            background-color: var(--color-tertiary);
+        }
+        
+        .time-block {
+            position: relative;
+            margin-bottom: 40px;
+            padding-left: 60px;
+        }
+        
+        .time-block::before {
+            content: "";
+            position: absolute;
+            left: 13px;
+            top: 10px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: var(--color-white);
+            border: 4px solid var(--color-tertiary);
+            z-index: 1;
+        }
+        
+        .time-card {
+            background-color: var(--color-white);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--color-tertiary);
+        }
+        
+        .time-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--color-background);
+        }
+        
+        .time-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--color-tertiary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .time-title svg {
+            margin-right: 10px;
+        }
+        
+        .time-duration {
+            font-weight: 500;
+            color: var(--color-secondary);
+            background-color: var(--color-background);
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+        
+        .sub-activity {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed var(--color-background);
+        }
+        
+        .sub-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--color-secondary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .sub-title svg {
+            margin-right: 8px;
+        }
+        
+        .element-tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .health-tag {
+            background-color: #f0f7ff;
+            color: #0066cc;
+            border: 1px solid #99ccff;
+        }
+        
+        .relationship-tag {
+            background-color: #fff0f7;
+            color: #cc0066;
+            border: 1px solid #ffccdd;
+        }
+        
+        .autonomy-tag {
+            background-color: #f7f0ff;
+            color: #6600cc;
+            border: 1px solid #ddccff;
+        }
+        
+        .contribution-tag {
+            background-color: #f0fff7;
+            color: #00cc66;
+            border: 1px solid #ccffdd;
+        }
+        
+        .income-tag {
+            background-color: #fffef0;
+            color: #cccc00;
+            border: 1px solid #ffffcc;
+        }
+        
+        .methods {
+            margin-top: 10px;
+        }
+        
+        .methods li {
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 22px;
+        }
+        
+        .methods li::before {
+            content: "•";
+            position: absolute;
+            left: 8px;
+            color: var(--color-tertiary);
+            font-weight: 700;
+        }
+        
+        .icon-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 70px;
+        }
+        
+        .icon-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--color-background);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 5px;
+        }
+        
+        .icon-text {
+            font-size: 12px;
+            text-align: center;
+            color: var(--color-secondary);
+        }
+        
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            font-size: 14px;
+            color: var(--color-quaternary);
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .title {
+                font-size: 28px;
+            }
+            
+            .time-block {
+                padding-left: 50px;
+            }
+            
+            .time-title {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">主観的幸福度を最大化するための1日のタイムスケジュール</h1>
+        </div>
+        
+        <div class="intro">
+            <h2 class="intro-title">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM15.88 8.29L10 14.17L8.12 12.29C7.73 11.9 7.1 11.9 6.71 12.29C6.32 12.68 6.32 13.31 6.71 13.7L9.3 16.29C9.69 16.68 10.32 16.68 10.71 16.29L17.3 9.7C17.69 9.31 17.69 8.68 17.3 8.29C16.91 7.9 16.27 7.9 15.88 8.29Z" fill="#1E56A0"/>
+                </svg>
+                科学的エビデンスに基づく幸福度要素
+            </h2>
+            <p>科学的エビデンスに基づいた調査結果から、主観的幸福度に最も影響を与える要素は以下の順序であることが分かりました：</p>
+            <ul class="ranking">
+                <li><strong>健康</strong></li>
+                <li><strong>人間関係</strong></li>
+                <li><strong>自己決定</strong></li>
+                <li><strong>社会貢献</strong></li>
+                <li><strong>十分な収入</strong></li>
+            </ul>
+        </div>
+        
+        <div class="timeline">
+            <div class="time-block">
+                <div class="time-card">
+                    <div class="time-header">
+                        <h3 class="time-title">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 6C8.69 6 6 8.69 6 12C6 15.31 8.69 18 12 18C15.31 18 18 15.31 18 12C18 8.69 15.31 6 12 6ZM12 16C9.79 16 8 14.21 8 12C8 9.79 9.79 8 12 8C14.21 8 16 9.79 16 12C16 14.21 14.21 16 12 16ZM12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.58 20 4 16.42 4 12C4 7.58 7.58 4 12 4C16.42 4 20 7.58 20 12C20 16.42 16.42 20 12 20ZM14.95 10.23L11.29 13.89L9.05 11.65C8.66 11.26 8.02 11.26 7.63 11.65C7.24 12.04 7.24 12.67 7.63 13.06L10.58 16.01C10.97 16.4 11.61 16.4 12 16.01L16.37 11.64C16.76 11.25 16.76 10.62 16.37 10.23C15.98 9.84 15.34 9.84 14.95 10.23Z" fill="#3D84B8"/>
+                            </svg>
+                            朝のルーティン
+                        </h3>
+                        <span class="time-duration">5:30～8:00</span>
+                    </div>
+                    
+                    <div class="sub-activity">
+                        <h4 class="sub-title">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM12.5 7H11V13L16.25 16.15L17 14.92L12.5 12.25V7Z" fill="#3D84B8"/>
+                            </svg>
+                            起床と朝の瞑想（5:30-6:00）
+                        </h4>
+                        <div>
+                            <span class="element-tag health-tag">健康要素</span>
+                            <span class="element-tag autonomy-tag">自己決定要素</span>
+                        </div>
+                        <ul class="methods">
+                            <li>5:30に起床（睡眠サイクルを考慮して22:30就寝）</li>
+                            <li>10分間の瞑想で心を整える</li>
+                            <li>感謝の日記を書く（3つの感謝できることを記録）</li>
+                            <li>一日の意図と目標を設定する</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="sub-activity">
+                        <h4 class="sub-title">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M13.49 5.48C14.59 5.48 15.49 4.58 15.49 3.48C15.49 2.38 14.59 1.48 13.49 1.48C12.39 1.48 11.49 2.38 11.49 3.48C11.49 4.58 12.39 5.48 13.49 5.48ZM9.89 19.38L10.89 14.98L12.99 16.98V22.98H14.99V15.48L12.89 13.48L13.49 9.98C14.79 11.98 17.09 13.48 19.69 13.48V11.48C17.69 11.48 15.89 10.18 15.09 8.38L14.09 6.38C13.69 5.68 12.99 5.18 12.09 5.18C11.79 5.18 11.49 5.28 11.29 5.38L5.89 8.28V13.48H7.89V9.58L9.99 8.48L8.89 14.48L4.09 17.98L5.09 19.48L9.89 19.38Z" fill="#3D84B8"/>
+                            </svg>
+                            朝の運動（6:00-6:45）
+                        </h4>
+                        <div>
+                            <span class="element-tag health-tag">健康要素</span>
+                        </div>
+                        <ul class="methods">
+                            <li>週3日：30分の有酸素運動（ジョギング、サイクリングなど）</li>
+                            <li>週3日：30分の筋力トレーニング（自重トレーニングまたはジム）</li>
+                            <li>週1日：ヨガまたはストレッチによる回復日</li>
+                            <li>運動中に教育的なポッドキャストやオーディオブックを聴く</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="sub-activity">
+                        <h4 class="sub-title">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 9H9V2H7V9H5V2H3V9C3 11.12 4.66 12.84 6.75 12.97V22H9.25V12.97C11.34 12.84 13 11.12 13 9V2H11V9ZM16 6V14H18.5V22H21V2C18.24 2 16 4.24 16 6Z" fill="#3D84B8"/>
+                            </svg>
+                            朝食と準備（6:45-7:30）
+                        </h4>
+                        <div>
+                            <span class="element-tag health-tag">健康要素</span>
+                        </div>
+                        <ul class="methods">
+                            <li>タンパク質、健康的な脂質、複合炭水化物、野菜/果物を含む朝食</li>
+                            <li>水分補給（500ml程度の水）</li>
+                            <li>シャワーと身支度</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="sub-activity">
+                        <h4 class="sub-title">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M16 11C17.66 11 18.99 9.66 18.99 8C18.99 6.34 17.66 5 16 5C14.34 5 13 6.34 13 8C13 9.66 14.34 11 16 11ZM8 11C9.66 11 10.99 9.66 10.99 8C10.99 6.34 9.66 5 8 5C6.34 5 5 6.34 5 8C5 9.66 6.34 11 8 11ZM8 13C5.67 13 1 14.17 1 16.5V19H15V16.5C15 14.17 10.33 13 8 13ZM16 13C15.71 13 15.38 13.02 15.03 13.05C16.19 13.89 17 15.02 17 16.5V19H23V16.5C23 14.17 18.33 13 16 13Z" fill="#3D84B8"/>
+                            </svg>
+                            家族との時間（7:30-8:00）
+                        </h4>
+                        <div>
+                            <span class="element-tag relationship-tag">人間関係要素</span>
+                        </div>
+                        <ul class="methods">
+                            <li>家族と朝食を共にする</li>
+                            <li>子どもがいる場合は学校の準備を手伝う</li>
+                            <li>配偶者との短い会話で一日の計画を共有</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="time-block">
+                <div class="time-card">
+                    <div class="time-header">
+                        <h3 class="time-title">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6H16V4C16 2.89 15.11 2 14 2H10C8.89 2 8 2.89 8 4V6H4C2.89 6 2.01 6.89 2.01 8L2 19C2 20.11 2.89 21 4 21H20C21.11 21 22 20.11 22 19V8C22 6.89 21.11 6 20 6ZM10 4H14V6H10V4ZM20 19H4V8H20V19ZM8 13.28V16C8 16.55 8.45 17 9 17H15C15.55 17 16 16.55 16 16V13.28C16 12.84 15.58 12.53 15.15 12.65L13 13.3V10C13 9.45 12.55 9 12 9C11.45 9 11 9.45 11 10V13.3L8.85 12.65C8.42 12.53 8 12.84 8 13.28Z" fill="#3D84B8"/>
+                            </svg>
+                            仕事の時間
+                        </h3>
+                        <span class="time-duration">8:00～17:00</span>
+                    </div>
+                    
+                    <div class="sub-activity">
+                        <h4 class="sub-title">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18 17H6V15H18V17ZM18 13H6V11H18V13ZM18 9H6V7H18V9ZM3 22L4.5 20.5L6 22L7.5 20.5L9 22L10.5 20.5L12 22L13.5 20.5L15 22L16.5 20.5L18 22L19.5 20.5L21 22V2L19.5 3.5L18 2L16.5 3.5L15 2L13.5 3.5L12 2L10.5 3.5L9 2L7.5 3.5L6 2L4.5 3.5L3 2V22Z" fill="#3D84B8"/>
+                            </svg>
+                            集中作業の時間（8:00-10:30）
+                        </h4>
+                        <div>
+                            <span class="element-tag income-tag">収入要素</span>
+                            <span class="element-tag autonomy-tag">自己決定要素</span>
+                        </div>
+                        <ul class="methods">
+                            <li>最も重要で集中力を要するタスクに取り組む</li>
+                            <li>ポモドーロテクニック（25分集中+5分休憩）の活用</li>
+                            <li>通知をオフにして集中環境を作る</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="sub-activity">
+                        <h4 class="sub-title">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11.99 2C6.47 2 2 6.48 2 12C2 17.52 6.47 22 11.99 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 11.99 2ZM12 20C7.58 20 4 16.42 4 12C4 7.58 7.58 4 12 4C16.42 4 20 7.58 20 12C20 16.42 16.42 20 12 20ZM12.5 7H11V13L16.25 16.15L17 14.92L12.5 12.25V7Z" fill="#3D84B8"/>
+                            </svg>
+                            短い休憩（10:30-10:45）
+                        </h4>
+                        <div>
+                            <span class="element-tag health-tag">健康要素</span>
+                        </div>
+                        <ul class="methods">
+                            <li>デスクから離れて軽いストレッチ</li>
+                            <li>水分補給</li>
+                            <li>窓の外を見るなど、遠くを見て目を休める</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="sub-activity">
+                        <h4 class="sub-title">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M16 11C17.66 11 18.99 9.66 18.99 8C18.99 6.34 17.66 5 16 5C14.34 5 13 6.34 13 8C13 9.66 14.34 11 16 11ZM8 11C9.66 11 10.99 9.66 10.99 8C10.99 6.34 9.66 5 8 5C6.34 5 5 6.34 5 8C5 9.66 6.34 11 8 11ZM8 13C5.67 13 1 14.17 1 16.5V19H15V16.5C15 14.17 10.33 13 8 13ZM16 13C15.71 13 15.38 13.02 15.03 13.05C16.19 13.89 17 15.02 17 16.5V19H23V16.5C23 14.17 18.33 13 16 13Z" fill="#3D84B8"/>
+                            </svg>
+                            協働作業の時間（10:45-12:30）
+                        </h4>
+                        <div>
+                            <span class="element-tag relationship-tag">人間関係要素</span>
+                            <span class="element-tag income-tag">収入要素</span>
+                        </div>
+                        <ul class="methods">
+                            <li>会議やチーム作業に参加</li>
+                            <li>同僚との協力プロジェクトの推進</li>
+                            <li>建設的なフィードバックの提供と受け入れ</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="sub-activity">
+                        <h4 class="sub-title">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11 9H9V2H7V9H5V2H3V9C3 11.12 4.66 12.84 6.75 12.97V22H9.25V12.97C11.34 12.84 13 11.12 13 9V2H11V9ZM16 6V14H18.5V22H21V2C18.24 2 16 4.24 16 6Z" fill="#3D84B8"/>
+                            </svg>
+                            昼食と
